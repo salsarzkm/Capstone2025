@@ -17,6 +17,10 @@ EcoSortAI adalah solusi berbasis AI untuk mengotomatisasi penyortiran sampah gun
   - Augmentasi data untuk meningkatkan variasi dan robustnes
   - Pelatihan model dan evaluasi performa (misalnya, confusion matrix dan classification report)
 
+- **Aplikasi Streamlit:**
+  - **app.py**: Berisi kode aplikasi Streamlit untuk mengimplementasikan EcoSortAI dalam antarmuka web interaktif.
+  - **requirements.txt**: Daftar semua dependensi yang diperlukan untuk menjalankan aplikasi Streamlit.
+
 - **README.md:**  
   Panduan lengkap untuk replikasi, yang mencakup:
   - Langkah-langkah instalasi dan konfigurasi lingkungan

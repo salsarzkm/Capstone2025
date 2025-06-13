@@ -378,10 +378,61 @@ Pastikan sistem Anda telah terinstall:
 
 ## Dokumentasi Tambahan
 
-- **Diagram Teknis & Flowchart:**  
-  Dokumen di folder `docs/` (misalnya, `flowchart.png`) menggambarkan alur proses pengembangan dari pengumpulan data hingga deployment.
+- **Panduan Pengguna:**
 
-- **Panduan Pengguna:**  
-  Bagian ini mencakup instruksi replikasi, konfigurasi lingkungan, dan langkah-langkah menjalankan kode, yang telah disediakan dalam file ini.
+Dokumen Pedoman Penggunaan Website EcoSortAI menyajikan petunjuk lengkap untuk membantu stakeholder, operator, dan masyarakat umum dalam mengakses serta memanfaatkan fitur-fitur website secara efektif. Untuk informasi lebih detail, silakan baca dokumen lengkap melalui tautan berikut:
+
+[**Dokumen Pedoman Penggunaan Website EcoSortAI**](https://drive.google.com/file/d/1rJ_FtSmTP4w6pvLFkCzE8P8z9Y35YOfe/view?usp=sharing)
+
+### Isi Dokumen
+
+1. **Pendahuluan**  
+   Selamat datang di pedoman penggunaan website EcoSortAI ([https://ecosortai.streamlit.app/](https://ecosortai.streamlit.app/)). Dokumen ini disusun untuk memberikan panduan mengenai cara mengakses dan memanfaatkan informasi serta analitik real-time terkait pengelolaan sampah berbasis teknologi AI.
+
+2. **Akses Website**  
+   - **Langkah 1:** Buka browser favorit Anda.  
+   - **Langkah 2:** Masukkan URL berikut pada bilah alamat: [https://ecosortai.streamlit.app/](https://ecosortai.streamlit.app/).  
+   - **Langkah 3:** Tunggu hingga halaman utama website termuat dengan tampilan antarmuka yang intuitif dan responsif.
+
+3. **Navigasi Antarmuka**  
+   Website EcoSortAI dirancang dengan antarmuka sederhana yang terdiri dari:  
+   - **Header:** Menampilkan logo, judul, dan menu navigasi utama.  
+   - **Dashboard Utama:** Menyajikan informasi real-time mengenai pengelolaan sampah, grafik, dan statistik hasil klasifikasi.  
+   - **Panel Menu/Sidebar:** Menyediakan akses ke fitur pendukung seperti laporan historis, analisis data, dan informasi operasional.
+
+4. **Fitur Utama**  
+   a. **Pengambilan Data dan Klasifikasi Sampah**  
+      - *Pengambilan Gambar:* Kamera pada aplikasi menangkap gambar sampah secara real-time.  
+      - *Preprocessing:* Gambar disesuaikan ukurannya, dinormalisasi, dan (opsional) di-augmentasi untuk meningkatkan keragaman data.  
+      - *Klasifikasi:* Gambar diklasifikasikan menggunakan model VGG16 dengan transfer learning dan fine-tuning ke dalam kategori "Anorganik Daur Ulang", "Anorganik Tidak Daur Ulang", "Organik", dan "B3".
+
+   b. **Tampilan Dashboard Real-Time**  
+      - Hasil klasifikasi ditampilkan secara langsung melalui dashboard interaktif.  
+      - Pengguna dapat memantau status dan analitik pengelolaan sampah secara real-time guna mendukung pengambilan keputusan.
+
+   c. **Pengelolaan Data dan Laporan**  
+      - *Riwayat Data:* Seluruh data pengelolaan sampah tersimpan dan dapat diakses untuk analisis lanjutan.  
+      - *Download Laporan:* Tersedia opsi untuk mengunduh laporan evaluasi performa sistem sebagai bahan evaluasi dan perencanaan.
+
+5. **Video Demo**  
+   Untuk memahami cara kerja EcoSortAI secara lebih mendalam, silakan tonton video demo berikut:  
+   **Judul:** EcoSortAI: Real-time Waste Classification Demo  
+   *(Tautan Video Demo dapat disesuaikan jika ada)*
+
+6. **Tips Penggunaan**  
+   - Pastikan koneksi internet stabil untuk tampilan data real-time yang optimal.  
+   - Gunakan browser versi terbaru agar mendapatkan antarmuka yang responsif dan kinerja terbaik.  
+   - Jika mengalami kendala, silakan merujuk kembali pada pedoman ini atau hubungi tim dukungan.
+
+7. **Kontak dan Dukungan**  
+   Untuk saran, pertanyaan, atau bantuan teknis terkait penggunaan website EcoSortAI, Anda dapat menghubungi kami melalui:
+   - **Email:**  
+     - A013XBF477@devacademy.id  
+     - A296XBM496@devacademy.id  
+     - A004XBM448@devacademy.id  
+     - A382YBM063@devacademy.id
+
+8. **Penutup**  
+   Kami berharap dokumen pedoman ini dapat memudahkan Anda dalam menggunakan website EcoSortAI secara optimal. Terima kasih atas kepercayaan dan partisipasi Anda dalam mendukung pengelolaan sampah yang lebih inovatif dan berkelanjutan.
 
 ---

@@ -233,7 +233,7 @@ model = Model(inputs=base_model.input, outputs=predictions)
     )
 ```
 
-Seluruh kode Python terkait model ditempatkan secara terstruktur dalam file seperti `train_model.py`, `model.py`, dan `utils.py` untuk memudahkan pemeliharaan dan pengembangan lebih lanjut. Pastikan untuk menginstal semua dependensi yang tercantum di dalam `requirements.txt` sebelum menjalankan skrip pelatihan dan evaluasi model.
+Pastikan untuk menginstal semua dependensi yang tercantum di dalam `requirements.txt` sebelum menjalankan skrip pelatihan dan evaluasi model.
 
 
 - **Notebook Pengembangan:**

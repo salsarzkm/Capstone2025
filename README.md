@@ -141,7 +141,7 @@ Pada dataset final yang telah disusun, informasi utama yang terdapat di dalamnya
 - **Gambar (Citra):**
 Masing-masing instance berupa gambar berformat JPEG atau PNG yang mengilustrasikan berbagai jenis sampah. Gambar memiliki variasi resolusi dan kondisi pencahayaan, mengingat sebagian data diambil dalam kondisi studio (Dataset 1) dan sebagian lagi dalam kondisi nyata (Dataset 2).
 - **Label/Kategori:**
-Setiap gambar diberi label sesuai dengan salah satu dari 5 kategori:
+Setiap gambar diberi label sesuai dengan salah satu dari 4 kategori:
   * Sampah Anorganik: Kategori ini mengacu pada sampah padat non-organik yang sulit atau tidak ekonomis untuk didaur ulang. Contohnya bisa berupa styrofoam, beberapa jenis kemasan plastik berlapis, popok bekas, atau pecahan keramik. Tugas model adalah membedakan jenis-jenis ini dari sampah anorganik yang bisa didaur ulang.
   * Sampah Berbahaya: Kategori ini mencakup sampah yang mengandung bahan kimia berbahaya atau zat beracun yang memerlukan penanganan khusus untuk mencegah kerusakan lingkungan atau risiko kesehatan. Contohnya meliputi baterai bekas, lampu neon, produk elektronik (e-waste), kaleng cat bekas, dan limbah medis. Model harus peka terhadap ciri-ciri visual yang mengindikasikan keberadaan bahan-bahan ini, seperti simbol peringatan atau bentuk unik dari perangkat elektronik.
   * Sampah Organik: Kategori ini adalah sisa-sisa material biologis yang dapat terurai secara alami atau diolah menjadi kompos. Contoh yang umum adalah sisa makanan (kulit buah, sayuran, nasi), daun kering, ranting, dan rumput. Model perlu mengidentifikasi tekstur, warna, dan bentuk khas dari material organik yang seringkali memiliki tampilan yang lebih "alami" atau "busuk" dibandingkan sampah anorganik.

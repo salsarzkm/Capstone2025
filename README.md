@@ -307,13 +307,13 @@ Pastikan sistem Anda telah terinstall:
 
    _Contoh file `requirements.txt` dapat berisi:_
    - tensorflow
-   - keras
-   - numpy
-   - pandas
+   - split-folders
    - matplotlib
-   - streamlit
+   - seaborn
+   - numpy
+   - pillow
+   - tqdm
    - scikit-learn
-   - dan dependensi lainnya.
 
 ---
 

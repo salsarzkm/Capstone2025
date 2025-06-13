@@ -549,9 +549,7 @@ Pastikan untuk menjalankan seluruh sel notebook secara berurutan agar seluruh pr
 
   Untuk melihat demo aplikasi real-time, jalankan:
 
-  ```bash
-  streamlit run app.py
-  ```
+  [Streamlit](https://ecosortai.streamlit.app/)
 
 ---
 

@@ -429,14 +429,16 @@ Pastikan sistem Anda telah terinstall:
    ```
 
    _file `requirements.txt` berisi:_
-   - tensorflow
+   - tensorflow>=2.5.0
    - split-folders
    - matplotlib
    - seaborn
+   - pandas
    - numpy
    - pillow
    - tqdm
    - scikit-learn
+   - streamlit
 
 ---
 
@@ -544,7 +546,6 @@ Pastikan untuk menjalankan seluruh sel notebook secara berurutan agar seluruh pr
 
 ---
 
-
 - **Menjalankan Aplikasi Streamlit:**
 
   Untuk melihat demo aplikasi real-time, jalankan:
@@ -575,12 +576,36 @@ Pastikan untuk menjalankan seluruh sel notebook secara berurutan agar seluruh pr
 
 ## Dependensi
 
-- **TensorFlow & Keras :** Untuk pengembangan dan pelatihan model deep learning.
-- **OpenCV & PIL:** Untuk pemrosesan dan manipulasi gambar.
-- **NumPy & Pandas:** Untuk perhitungan numerik dan pengelolaan data.
-- **Matplotlib & Seaborn:** Untuk visualisasi data dan hasil evaluasi.
-- **Streamlit:** Untuk deployment aplikasi web.
-- **Scikit-Learn:** Untuk evaluasi dan metrik performa.
+Proyek EcoSortAI memanfaatkan berbagai pustaka dan framework untuk memastikan pengembangan, pelatihan, evaluasi, dan deployment model deep learning berjalan dengan lancar. Semua dependensi ini terdaftar di file [`requirements.txt`](./requirements.txt). Berikut penjelasan singkat mengenai masing-masing:
+
+- **TensorFlow & Keras:**  
+  Digunakan untuk pengembangan dan pelatihan model deep learning. Framework ini menyediakan antarmuka modular yang memudahkan pembuatan, pelatihan, dan evaluasi model secara efektif.
+
+- **OpenCV & PIL:**  
+  Untuk pemrosesan dan manipulasi gambar. Proyek ini menggunakan `Pillow` (PIL) sebagai library utama untuk operasional pengolahan gambar.
+
+- **NumPy & Pandas:**  
+  NumPy digunakan untuk perhitungan numerik dan manipulasi array, sedangkan Pandas menyediakan struktur data dan alat analisis untuk mengelola data tabular dengan efisien.
+
+- **Matplotlib & Seaborn:**  
+  Library ini digunakan untuk visualisasi data. Mereka membantu dalam menghasilkan grafik dan diagram untuk mengevaluasi performa model secara visual.
+
+- **Streamlit:**  
+  Digunakan untuk deployment aplikasi web interaktif yang memungkinkan pengguna mengakses fitur inferensi model secara real-time.
+
+- **Scikit-Learn:**  
+  Digunakan untuk evaluasi model dan perhitungan berbagai metrik performa, seperti akurasi, precision, recall, dan pembuatan confusion matrix.
+
+- **split-folders:**  
+  Memudahkan pembagian dataset gambar ke dalam subset pelatihan, validasi, dan pengujian secara otomatis sehingga proses replikasi eksperimen menjadi lebih terstruktur.
+
+- **tqdm:**  
+  Menyediakan progress bar selama proses iterasi, yang membantu memantau proses pelatihan dan evaluasi secara real-time.
+
+Untuk menginstal semua dependensi di atas, pastikan Anda telah menyiapkan virtual environment yang sesuai, kemudian jalankan:
+
+```bash
+pip install -r requirements.txt
 
 ---
 

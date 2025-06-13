@@ -156,119 +156,91 @@ Data diorganisasikan dalam struktur folder, di mana folder utama telah dibagi me
 
 ## Isi Repositori
 
-- **Kode Sumber:**  
-  Kode Python untuk pengembangan model, yang mencakup penggunaan TensorFlow/Keras, implementasi arsitektur VGG16 beserta transfer learning dan fine-tuning.
+- ## Kode Sumber
 
-- **Notebook Pengembangan:**  
-  Dokumen interaktif (Jupyter Notebook) yang mendemonstrasikan langkah-langkah:
-  - Split Data
-    #### Split ke folder train, val, test
-    splitfolders.ratio(
-        original_dataset_dir,
-        output="/content/dataset_split",
-        seed=42,
-        ratio=(0.7, 0.15, 0.15),
-        move=False  # False = copy file, True = pindahkan file
-    )
-    
-    #### Path setelah split
-    train_dir = '/content/dataset_split/train'
-    val_dir = '/content/dataset_split/val'
-    test_dir = '/content/dataset_split/test'
-    
-  - Preprocessing data (resize, normalisasi) & Augmentasi data untuk meningkatkan variasi dan robustnes
-    #### Augmentasi hanya untuk training
-    train_datagen = ImageDataGenerator(
-        rescale=1./255,
-        rotation_range=30,
-        zoom_range=0.3,
-        width_shift_range=0.2,
-        height_shift_range=0.2,
-        shear_range=0.2,
-        horizontal_flip=True,
-        brightness_range=[0.7, 1.3]
-    )
-    
-    #### Untuk validation & test (hanya rescale)
-    val_test_datagen = ImageDataGenerator(rescale=1./255)
-    
-    #### Generator
-    train_generator = train_datagen.flow_from_directory(
-        train_dir,
-        target_size=(224, 224),
-        batch_size=32,
-        class_mode='categorical'
-    )
-    
-    val_generator = val_test_datagen.flow_from_directory(
-        val_dir,
-        target_size=(224, 224),
-        batch_size=32,
-        class_mode='categorical'
-    )
-    
-    test_generator = val_test_datagen.flow_from_directory(
-        test_dir,
-        target_size=(224, 224),
-        batch_size=32,
-        class_mode='categorical',
-        shuffle=False  # Penting untuk evaluasi akurasi per kelas nanti
-    )
-    
-  - Pelatihan model
-    #### 1. Load VGG16 tanpa fully connected layer, freeze semua layer dulu
-    base_model = VGG16(
-        weights='imagenet',
-        include_top=False,
-        input_shape=(224, 224, 3)
-    )
-    base_model.trainable = False
-    
-    #### 2. Tambah top layers
-    x = base_model.output
-    x = Flatten()(x)
-    x = Dense(256, activation='relu')(x)
-    x = Dropout(0.5)(x)
-    predictions = Dense(4, activation='softmax')(x)
-    
-    model = Model(inputs=base_model.input, outputs=predictions)
-    
-    #### 3. Compile model dengan learning rate agak besar untuk training awal
-    model.compile(
-        optimizer=Adam(learning_rate=1e-4),
-        loss='categorical_crossentropy',
-        metrics=['accuracy']
-    )
+Kode sumber proyek ini ditulis dalam bahasa Python untuk mengembangkan model deep learning guna mengotomatisasi proses penyortiran sampah. Secara spesifik, proyek ini mencakup:
 
-  - Evaluasi performa (confusion matrix dan classification report)
-    #### 1. Prediksi data test
-    y_pred_probs = model.predict(test_generator)
-    y_pred = np.argmax(y_pred_probs, axis=1)
+- **Penggunaan TensorFlow/Keras:**  
+  Menggunakan framework TensorFlow dan Keras untuk membangun, melatih, dan mengevaluasi model. Framework ini menyediakan antarmuka modular yang memudahkan eksperimen dan integrasi dengan komponen lain.
+
+```
+import tensorflow as tf
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import (
+    Conv2D, 
+    MaxPooling2D, 
+    GlobalAveragePooling2D,
+    Dense, 
+    Flatten, 
+    Dropout, 
+    BatchNormalization
+)
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.applications import VGG16
+```
+
+- **Implementasi Arsitektur VGG16:**  
+  Model VGG16, yang sudah dilatih sebelumnya (pre-trained) pada dataset ImageNet, digunakan sebagai basis. VGG16 berperan dalam ekstraksi fitur visual dari gambar sampah dengan performa yang stabil.
+
+- **Transfer Learning:**  
+  Proyek memanfaatkan transfer learning dengan memanfaatkan bobot-bobot dari model VGG16 yang telah terlatih. Dengan demikian, model langsung mendapatkan fitur dasar dari dataset besar sebelum diadaptasi ke dataset spesifik pengelolaan sampah, yang secara signifikan mempercepat proses pelatihan dan meningkatkan akurasi.
+
+- **Fine-Tuning:**  
+  Setelah memanfaatkan bobot pre-trained, lapisan-lapisan akhir dari VGG16 di-fine-tune agar sesuai dengan karakteristik gambar sampah. Proses inti fine-tuning meliputi:
+  - **Pembekuan lapisan awal:** Menjaga fitur-fitur dasar yang sudah dipelajari.
+  - **Pelatihan ulang lapisan akhir:** Melatih ulang lapisan-lapisan terakhir untuk menangkap ciri-ciri unik dari dataset sampah (seperti variasi jenis, tekstur, dan warna).
+
+Seluruh kode Python terkait model ditempatkan secara terstruktur dalam file seperti `train_model.py`, `model.py`, dan `utils.py` untuk memudahkan pemeliharaan dan pengembangan lebih lanjut. Pastikan untuk menginstal semua dependensi yang tercantum di dalam `requirements.txt` sebelum menjalankan skrip pelatihan dan evaluasi model.
+
+
+- **Notebook Pengembangan:**
+
+Dokumen interaktif untuk proyek EcoSortAI ini dijalankan melalui Google Colab. Notebook ini mendemonstrasikan langkah-langkah utama dalam pengembangan dan evaluasi model, sehingga memudahkan pengguna untuk memahami dan mereplikasi proses yang telah dilakukan. Berikut adalah langkah-langkah yang tercakup dalam notebook:
+
+- **Preprocessing Data:**
+  - **Resize:** Mengubah ukuran gambar agar konsisten dan sesuai dengan dimensi yang diperlukan sebagai input model.
+  - **Normalisasi:** Melakukan penyesuaian nilai piksel agar data berada pada skala yang sama, yang membantu dalam proses konvergensi selama pelatihan.
+
+- **Augmentasi Data:**
+  - Menerapkan teknik augmentasi seperti rotasi, flipping, zoom, dan penyesuaian pencahayaan untuk meningkatkan variasi dataset.
+  - Teknik ini dirancang agar model dapat belajar lebih robust dari berbagai kondisi gambar, sekaligus mengurangi risiko overfitting.
+
+- **Pelatihan Model dan Evaluasi Performa:**
+  - **Pelatihan Model:** Menggunakan TensorFlow/Keras dengan implementasi arsitektur VGG16 yang telah dioptimalkan melalui transfer learning dan fine-tuning, sehingga model dapat mempelajari fitur khusus dari gambar sampah.
+  - **Evaluasi:** Menghasilkan visualisasi seperti confusion matrix dan classification report yang menampilkan metrik performa (misalnya, precision, recall, F1-score) untuk setiap kategori, sehingga memudahkan analisis kinerja model.
+
+### Instruksi Penggunaan Notebook di Google Colab:
+
+1. **Buka Notebook:**
+   - Akses notebook melalui link berikut: [LAI25-SM011_EcoSortAI](https://colab.research.google.com/drive/1Oa2ke4XptuQCDGlJX0xpBgqiPqFkJePs?usp=sharing)
     
-    #### 2. Label asli dari generator
-    y_true = test_generator.classes
-    
-    #### 3. Nama kelas (urutan sesuai class_indices)
-    class_names = list(test_generator.class_indices.keys())
-    
-    #### 4. Confusion Matrix
-    cm = confusion_matrix(y_true, y_pred)
-    
-    #### 5. Visualisasi Confusion Matrix
-    plt.figure(figsize=(8,6))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=class_names, yticklabels=class_names)
-    plt.xlabel('Predicted')
-    plt.ylabel('Actual')
-    plt.title('Confusion Matrix - Klasifikasi Sampah')
-    plt.show()
-    
-    #### 6. Classification Report
-    print("Classification Report:")
-    print(classification_report(y_true, y_pred, target_names=class_names))
-    
+2. **Jalankan Sel Notebook Secara Berurutan:**
+   - Pastikan semua sel dijalankan dari awal hingga akhir, sehingga proses mulai dari preprocessing hingga evaluasi model berjalan secara menyeluruh.
+
+3. **Siapkan Dataset:**
+   - Pastikan dataset telah tersedia dan tersusun sesuai struktur yang dijelaskan dalam dokumentasi proyek, sehingga fungsi pemrosesan data dapat menemukan file dengan benar.
+
+4. **Pantau Hasil Evaluasi:**
+   - Hasil pelatihan, termasuk confusion matrix dan classification report, akan muncul dalam bentuk visualisasi pada output notebook. Analisis hasil ini untuk mengevaluasi performa model dan menentukan area perbaikan lebih lanjut.
+
+Dengan mengikuti instruksi di atas, pengguna dapat dengan mudah menjalankan ulang seluruh pipeline pengembangan model EcoSortAI melalui Google Colab, serta memahami setiap tahap mulai dari preprocessing hingga evaluasi performa.
+
+---
+
 - **Aplikasi Streamlit:**
-  - **app.py**: Berisi kode aplikasi Streamlit untuk mengimplementasikan EcoSortAI dalam antarmuka web interaktif.
-  - **requirements.txt**: Daftar semua dependensi yang diperlukan untuk menjalankan aplikasi Streamlit.
+
+- **app 
+  File `app.py` berisi kode aplikasi Streamlit yang mengimplementasikan EcoSortAI dalam antarmuka web interaktif. Kode ini mencakup:
+  - Pengambilan input gambar dari pengguna (misalnya, melalui kamera atau upload file).
+  - Pemanggilan model deep learning yang telah dilatih (menggunakan VGG16 dengan transfer learning dan fine-tuning) untuk melakukan inferensi secara real-time.
+  - Penampilan hasil klasifikasi sampah (misalnya, kategori seperti Anorganik Daur Ulang, Anorganik Tidak Daur Ulang, B3, dan Organik) melalui dashboard interaktif.
+  - Visualisasi data pendukung dan metrik performa yang membantu pengguna memahami kinerja model.
+  
+- **requirements.txt**  
+  File `requirements.txt` berisi daftar semua dependensi yang diperlukan untuk menjalankan aplikasi Streamlit. Pastikan Anda menginstal semua paket pada file ini agar aplikasi dapat berjalan dengan lancar. Contoh dependensi yang biasanya tercantum antara lain:
 
 - **README.md:**  
   Panduan lengkap untuk replikasi, yang mencakup:

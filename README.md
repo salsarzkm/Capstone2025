@@ -354,9 +354,9 @@ Dokumen interaktif untuk proyek EcoSortAI ini dijalankan melalui Google Colab. N
 
 - **Aplikasi Streamlit:**
 
-- **app 
-  File `app.py` berisi kode aplikasi Streamlit yang mengimplementasikan EcoSortAI dalam antarmuka web interaktif. Kode ini mencakup:
-  - Pengambilan input gambar dari pengguna (misalnya, melalui kamera atau upload file).
+- [Streamlit](https://ecosortai.streamlit.app/) 
+  Aplikasi Streamlit yang mengimplementasikan EcoSortAI dalam antarmuka web interaktif. Mencakup:
+  - Pengambilan input gambar dari pengguna (melalui kamera atau upload file).
   - Pemanggilan model deep learning yang telah dilatih (menggunakan VGG16 dengan transfer learning dan fine-tuning) untuk melakukan inferensi secara real-time.
   - Penampilan hasil klasifikasi sampah (misalnya, kategori seperti Anorganik Daur Ulang, Anorganik Tidak Daur Ulang, B3, dan Organik) melalui dashboard interaktif.
   - Visualisasi data pendukung dan metrik performa yang membantu pengguna memahami kinerja model.
@@ -370,12 +370,6 @@ Dokumen interaktif untuk proyek EcoSortAI ini dijalankan melalui Google Colab. N
   - numpy
   - pandas
   - dan dependensi lainnya
-
-- **README.md:**  
-  Panduan lengkap untuk replikasi, yang mencakup:
-  - Langkah-langkah instalasi dan konfigurasi lingkungan
-  - Instruksi menjalankan kode dan notebook
-  - Penjelasan alur kerja serta dependensi yang diperlukan
 
 ---
 

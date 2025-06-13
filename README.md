@@ -605,6 +605,7 @@ Untuk menginstal semua dependensi di atas, pastikan Anda telah menyiapkan virtua
 
 ```bash
 pip install -r requirements.txt
+```
 
 ---
 

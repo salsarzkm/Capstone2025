@@ -128,10 +128,9 @@ Proyek ini menggunakan dua sumber dataset eksternal yang telah diunduh dari Kagg
 ### **2. Pembentukan Dataset**
 
 - Dataset yang digunakan dalam proyek ini dihasilkan dengan mengintegrasi dua sumber data eksternal dari Kaggle tersebut.
-- Setelah proses pengumpulan, pembersihan, dan penyelarasan, kedua dataset tersebut dikombinasikan dan direstrukturisasi secara mandiri oleh tim untuk menghasilkan satu dataset final yang konsisten dengan kebutuhan proyek. Dataset final ini kemudian dibagi menjadi 5 kategori utama sesuai dengan fokus proyek, yaitu:
+- Setelah proses pengumpulan, pembersihan, dan penyelarasan, kedua dataset tersebut dikombinasikan dan direstrukturisasi secara mandiri oleh tim untuk menghasilkan satu dataset final yang konsisten dengan kebutuhan proyek. Dataset final ini kemudian dibagi menjadi 4 kategori utama sesuai dengan fokus proyek, yaitu:
   * Sampah Anorganik
   * Sampah Berbahaya
-  * Sampah Elektronik
   * Sampah Organik
   * Sampah yang Bisa Didaur Ulang
 - Dataset hasil integrasi dan pembagian kategori ini telah disimpan secara terpusat dan dapat diakses melalui Google Drive: [Dataset Capstone Project](https://drive.google.com/drive/folders/1iWAHYIqiK6B8bj5YJqCr98gAF50-hA4S?usp=drive_link)
@@ -143,11 +142,10 @@ Pada dataset final yang telah disusun, informasi utama yang terdapat di dalamnya
 Masing-masing instance berupa gambar berformat JPEG atau PNG yang mengilustrasikan berbagai jenis sampah. Gambar memiliki variasi resolusi dan kondisi pencahayaan, mengingat sebagian data diambil dalam kondisi studio (Dataset 1) dan sebagian lagi dalam kondisi nyata (Dataset 2).
 - **Label/Kategori:**
 Setiap gambar diberi label sesuai dengan salah satu dari 5 kategori:
-* Sampah Anorganik: Meliputi sampah yang umumnya berupa bahan non-organik seperti plastik, logam, dan kaca.
-* Sampah Berbahaya: Sampah yang mengandung bahan kimia atau komponen beracun.
-* Sampah Elektronik: Mengacu pada sampah dari peralatan elektronik yang sudah tidak terpakai.
-* Sampah Organik: Berupa sisa-sisa bahan organik seperti sisa makanan dan dedaunan.
-* Sampah yang Bisa Didaur Ulang: Gambar-gambar yang menunjukkan bahan-bahan yang bisa diolah ulang menjadi produk baru.
+  * Sampah Anorganik: Kategori ini mengacu pada sampah padat non-organik yang sulit atau tidak ekonomis untuk didaur ulang. Contohnya bisa berupa styrofoam, beberapa jenis kemasan plastik berlapis, popok bekas, atau pecahan keramik. Tugas model adalah membedakan jenis-jenis ini dari sampah anorganik yang bisa didaur ulang.
+  * Sampah Berbahaya: Kategori ini mencakup sampah yang mengandung bahan kimia berbahaya atau zat beracun yang memerlukan penanganan khusus untuk mencegah kerusakan lingkungan atau risiko kesehatan. Contohnya meliputi baterai bekas, lampu neon, produk elektronik (e-waste), kaleng cat bekas, dan limbah medis. Model harus peka terhadap ciri-ciri visual yang mengindikasikan keberadaan bahan-bahan ini, seperti simbol peringatan atau bentuk unik dari perangkat elektronik.
+  * Sampah Organik: Kategori ini adalah sisa-sisa material biologis yang dapat terurai secara alami atau diolah menjadi kompos. Contoh yang umum adalah sisa makanan (kulit buah, sayuran, nasi), daun kering, ranting, dan rumput. Model perlu mengidentifikasi tekstur, warna, dan bentuk khas dari material organik yang seringkali memiliki tampilan yang lebih "alami" atau "busuk" dibandingkan sampah anorganik.
+  * Sampah yang Bisa Didaur Ulang: Kategori ini mencakup sampah padat non-organik yang memiliki potensi untuk diolah kembali menjadi produk baru. Contoh spesifik mungkin termasuk botol plastik (PET, HDPE), kaleng aluminium, botol kaca, dan karton bekas. Model harus belajar mengenali karakteristik visual yang membedakan material ini dari sampah non-daur ulang.
   
 - **Struktur Data:**
 Data diorganisasikan dalam struktur folder, di mana folder utama telah dibagi menjadi 5 subfolder berdasarkan kategori yang telah ditetapkan. Ini memudahkan proses automatisasi data (misalnya melalui fungsi `tf.keras.preprocessing.image_dataset_from_directory`) dan analisis lebih lanjut.

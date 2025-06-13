@@ -434,7 +434,7 @@ Pastikan sistem Anda telah terinstall:
    pip install -r requirements.txt
    ```
 
-   _Contoh file `requirements.txt` dapat berisi:_
+   _file `requirements.txt` berisi:_
    - tensorflow
    - split-folders
    - matplotlib
@@ -450,19 +450,106 @@ Pastikan sistem Anda telah terinstall:
 
 - **Melatih Model:**
 
-  Jalankan skrip pelatihan model:
+## Pengembangan Model Menggunakan VGG16
 
-  ```bash
-  python train_model.py
-  ```
+Proyek EcoSortAI memanfaatkan model VGG16 yang telah dilatih sebelumnya (pre-trained) untuk ekstraksi fitur dari gambar sampah. Proses pengembangan model kami terdiri dari beberapa tahap, yaitu:
+
+1. **Load VGG16 tanpa Fully Connected Layer & Freeze Layer Awal**
+   Kami memuat model VGG16 dengan parameter yang telah dilatih di ImageNet, mengecualikan fully connected layer (include_top=False), dan membekukan (freeze) seluruh lapisan pada awal pelatihan.
+   
+2. **Menambahkan Top Layers**
+   Ditambahkan beberapa lapisan kustom (Flatten, Dense, Dropout) untuk melakukan klasifikasi berdasarkan kategori sampah (empat kelas).
+   
+3. **Compile Model untuk Training Awal**
+   Model dikompilasi dengan learning rate yang relatif besar untuk proses training awal (feature extraction).
+   
+4. **Callbacks untuk Monitoring Training**
+   Kami menggunakan callbacks seperti EarlyStopping dan ModelCheckpoint untuk mengontrol proses pelatihan dan mencegah overfitting.
+   
+5. **Training Awal (Feature Extraction)**
+   Melatih model selama beberapa epoch untuk mengekstrak fitur secara awal.
+   
+6. **Fine-Tuning**
+   Meng-unfreeze beberapa lapisan terakhir dari VGG16 untuk training lanjut dengan learning rate yang lebih kecil.
+   
+7. **Evaluasi Model**
+   Model dievaluasi pada test set untuk mengukur akurasi klasifikasi setelah fine-tuning.
+
+Berikut adalah kode lengkap yang digunakan, jalankan skrip pelatihan model:
+
+```
+# 1. Load VGG16 tanpa fully connected layer, freeze semua layer dulu
+base_model = VGG16(
+    weights='imagenet',
+    include_top=False,
+    input_shape=(224, 224, 3)
+)
+base_model.trainable = False
+
+# 2. Tambah top layers
+x = base_model.output
+x = Flatten()(x)
+x = Dense(256, activation='relu')(x)
+x = Dropout(0.5)(x)
+predictions = Dense(4, activation='softmax')(x)
+
+model = Model(inputs=base_model.input, outputs=predictions)
+
+# 3. Compile model dengan learning rate agak besar untuk training awal
+model.compile(
+    optimizer=Adam(learning_rate=1e-4),
+    loss='categorical_crossentropy',
+    metrics=['accuracy']
+)
+
+# 4. Callbacks
+callbacks = [
+    EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True),
+    ModelCheckpoint("best_vgg16_model.h5", monitor='val_accuracy', save_best_only=True)
+]
+
+# 5. Training awal (feature extraction)
+history = model.fit(
+    train_generator,
+    epochs=20,
+    validation_data=val_generator,
+    callbacks=callbacks
+)
+
+# 6. Fine-tuning: unfreeze beberapa layer terakhir VGG16 untuk training lanjut
+for layer in base_model.layers[-4:]:
+    layer.trainable = True
+
+# 7. Compile ulang dengan learning rate kecil untuk fine-tuning
+model.compile(
+    optimizer=Adam(learning_rate=1e-5),
+    loss='categorical_crossentropy',
+    metrics=['accuracy']
+)
+
+# 8. Training fine-tuning
+history_finetune = model.fit(
+    train_generator,
+    epochs=30,
+    validation_data=val_generator,
+    callbacks=callbacks
+)
+
+# 9. Evaluasi di test set
+test_loss, test_acc = model.evaluate(test_generator)
+print(f"Akurasi pada Test Set setelah Fine-Tuning: {test_acc * 100:.2f}%")
+```
 
 - **Menjalankan Notebook:**
 
-  Buka notebook pengembangan dengan Jupyter Notebook atau JupyterLab:
+Anda dapat membuka notebook pengembangan menggunakan Jupyter Notebook atau JupyterLab dengan perintah berikut:
 
-  ```bash
-  jupyter notebook EcoSortAI_Notebook.ipynb
-  ```
+[**Buka EcoSortAI Notebook di Google Colab**](https://colab.research.google.com/drive/1Oa2ke4XptuQCDGlJX0xpBgqiPqFkJePs#scrollTo=911Lw5um_DOE)
+
+Pastikan untuk menjalankan seluruh sel notebook secara berurutan agar seluruh proses pengembangan mulai dari preprocessing, augmentasi, pelatihan, hingga evaluasi performa dapat direplikasi dengan benar.
+
+---
+
 
 - **Menjalankan Aplikasi Streamlit:**
 

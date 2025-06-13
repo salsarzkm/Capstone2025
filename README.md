@@ -162,7 +162,7 @@ Data diorganisasikan dalam struktur folder, di mana folder utama telah dibagi me
 - **Notebook Pengembangan:**  
   Dokumen interaktif (Jupyter Notebook) yang mendemonstrasikan langkah-langkah:
   - Split Data
-    # Split ke folder train, val, test
+    #### Split ke folder train, val, test
     splitfolders.ratio(
         original_dataset_dir,
         output="/content/dataset_split",
@@ -171,13 +171,13 @@ Data diorganisasikan dalam struktur folder, di mana folder utama telah dibagi me
         move=False  # False = copy file, True = pindahkan file
     )
     
-    # Path setelah split
+    #### Path setelah split
     train_dir = '/content/dataset_split/train'
     val_dir = '/content/dataset_split/val'
     test_dir = '/content/dataset_split/test'
     
   - Preprocessing data (resize, normalisasi) & Augmentasi data untuk meningkatkan variasi dan robustnes
-    # Augmentasi hanya untuk training
+    #### Augmentasi hanya untuk training
     train_datagen = ImageDataGenerator(
         rescale=1./255,
         rotation_range=30,
@@ -189,10 +189,10 @@ Data diorganisasikan dalam struktur folder, di mana folder utama telah dibagi me
         brightness_range=[0.7, 1.3]
     )
     
-    # Untuk validation & test (hanya rescale)
+    #### Untuk validation & test (hanya rescale)
     val_test_datagen = ImageDataGenerator(rescale=1./255)
     
-    # Generator
+    #### Generator
     train_generator = train_datagen.flow_from_directory(
         train_dir,
         target_size=(224, 224),
@@ -216,7 +216,7 @@ Data diorganisasikan dalam struktur folder, di mana folder utama telah dibagi me
     )
     
   - Pelatihan model
-    # 1. Load VGG16 tanpa fully connected layer, freeze semua layer dulu
+    #### 1. Load VGG16 tanpa fully connected layer, freeze semua layer dulu
     base_model = VGG16(
         weights='imagenet',
         include_top=False,
@@ -224,7 +224,7 @@ Data diorganisasikan dalam struktur folder, di mana folder utama telah dibagi me
     )
     base_model.trainable = False
     
-    # 2. Tambah top layers
+    #### 2. Tambah top layers
     x = base_model.output
     x = Flatten()(x)
     x = Dense(256, activation='relu')(x)
@@ -233,7 +233,7 @@ Data diorganisasikan dalam struktur folder, di mana folder utama telah dibagi me
     
     model = Model(inputs=base_model.input, outputs=predictions)
     
-    # 3. Compile model dengan learning rate agak besar untuk training awal
+    #### 3. Compile model dengan learning rate agak besar untuk training awal
     model.compile(
         optimizer=Adam(learning_rate=1e-4),
         loss='categorical_crossentropy',
@@ -241,20 +241,20 @@ Data diorganisasikan dalam struktur folder, di mana folder utama telah dibagi me
     )
 
   - Evaluasi performa (confusion matrix dan classification report)
-    # 1. Prediksi data test
+    #### 1. Prediksi data test
     y_pred_probs = model.predict(test_generator)
     y_pred = np.argmax(y_pred_probs, axis=1)
     
-    # 2. Label asli dari generator
+    #### 2. Label asli dari generator
     y_true = test_generator.classes
     
-    # 3. Nama kelas (urutan sesuai class_indices)
+    #### 3. Nama kelas (urutan sesuai class_indices)
     class_names = list(test_generator.class_indices.keys())
     
-    # 4. Confusion Matrix
+    #### 4. Confusion Matrix
     cm = confusion_matrix(y_true, y_pred)
     
-    # 5. Visualisasi Confusion Matrix
+    #### 5. Visualisasi Confusion Matrix
     plt.figure(figsize=(8,6))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=class_names, yticklabels=class_names)
     plt.xlabel('Predicted')
@@ -262,7 +262,7 @@ Data diorganisasikan dalam struktur folder, di mana folder utama telah dibagi me
     plt.title('Confusion Matrix - Klasifikasi Sampah')
     plt.show()
     
-    # 6. Classification Report
+    #### 6. Classification Report
     print("Classification Report:")
     print(classification_report(y_true, y_pred, target_names=class_names))
     

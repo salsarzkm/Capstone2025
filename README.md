@@ -363,13 +363,15 @@ Dokumen interaktif untuk proyek EcoSortAI ini dijalankan melalui Google Colab. N
   
 - **requirements.txt**  
   File `requirements.txt` berisi daftar semua dependensi yang diperlukan untuk menjalankan aplikasi Streamlit. Pastikan Anda menginstal semua paket pada file ini agar aplikasi dapat berjalan dengan lancar. Dependensi yang tercantum antara lain:
-  - streamlit
-  - tensorflow
-  - gdown
-  - scikit
+  - tensorflow>=2.5.0
+  - split-folders
+  - matplotlib
+  - seaborn
   - numpy
-  - pandas
-  - dan dependensi lainnya
+  - pillow
+  - tqdm
+  - scikit-learn
+  - streamlit
 
 ---
 
@@ -433,7 +435,6 @@ Pastikan sistem Anda telah terinstall:
    - split-folders
    - matplotlib
    - seaborn
-   - pandas
    - numpy
    - pillow
    - tqdm

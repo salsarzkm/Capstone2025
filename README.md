@@ -52,6 +52,108 @@ EcoSortAI adalah solusi berbasis AI untuk mengotomatisasi penyortiran sampah gun
 
 ---
 
+## **Business Understanding**
+
+### **Pernyataan Masalah**
+
+Saat ini, pengelolaan sampah di banyak kota mengalami beberapa kendala kritis yang berdampak pada efisiensi operasional dan kualitas lingkungan, yaitu:
+- Proses Pemilahan yang Manual dan Lambat:
+Metode konvensional untuk memilah sampah dilakukan secara manual, sehingga rawan terjadi kesalahan dan sangat tidak efisien untuk menangani volume sampah yang terus meningkat.
+- Ketidakakuratan dalam Klasifikasi Sampah:
+Tanpa adanya sistem otomatis, identifikasi jenis sampah (misalnya sampah anorganik, berbahaya, elektronik, organik, dan yang dapat didaur ulang) kerap mengalami inkonsistensi. Hal ini tidak hanya menghambat proses daur ulang, tetapi juga berpotensi menimbulkan risiko kesehatan dan lingkungan.
+- Keterbatasan Data untuk Pengambilan Keputusan:
+Minimnya data yang terintegrasi dan terkelola dengan baik menyebabkan sulitnya menganalisa arus dan komposisi sampah, sehingga pengambil kebijakan tidak mendapatkan insight yang diperlukan untuk membuat perbaikan strategis.
+
+
+### **Tujuan**
+
+Tujuan utama dari proyek ini adalah untuk mengembangkan sebuah aplikasi yang mengintegrasikan teknologi machine learning guna mengatasi masalah pengelolaan sampah secara menyeluruh. Adapun tujuan spesifiknya meliputi:
+- Otomatisasi Klasifikasi Sampah:
+Membangun model machine learning berbasis TensorFlow yang mampu secara otomatis mengklasifikasikan jenis sampah dari data citra dengan akurasi tinggi.
+- Meningkatkan Efisiensi Operasional:
+Mengubah proses pemilahan dari metode manual ke sistem otomatis sehingga dapat mengurangi waktu, tenaga, dan potensi kesalahan dalam identifikasi.
+- Menyediakan Data Insight untuk Pengambilan Keputusan:
+Menghasilkan data yang terintegrasi dari proses klasifikasi untuk mendukung analisis lebih lanjut, yang nantinya dapat digunakan oleh pihak berwenang dalam merancang strategi pengelolaan sampah yang lebih adaptif dan efisien.
+
+### **Solution Approach**
+
+1. **Pendekatan Utama (Custom CNN Model dengan TensorFlow)**
+   - **Pengembangan Model:**
+     Membangun model Convolutional Neural Network (CNN) dari awal menggunakan TensorFlow. Pendekatan ini dilakukan tanpa menggunakan model dari TensorFlow Hub atau resource serupa, sesuai dengan ketentuan.
+   - ***Preprocessing* dan Augmentasi Data:**
+     Memastikan data citra sampah yang dikumpulkan dan disimpan di Google Drive diproses secara optimal melalui tahap normalisasi, resizing, dan augmentasi untuk meningkatkan keragaman dan robustness model dalam berbagai kondisi nyata.
+   - **Inferensi Sederhana:**
+     Menyusun kode inferensi yang sederhana untuk mengujicobakan model dalam mengidentifikasi jenis sampah secara real-time, sehingga aplikasi dapat dengan mudah diintegrasikan dengan antarmuka.
+     
+2. **Pendekatan Alternatif (Benchmark dengan Transfer Learning – Opsional/Side Quest):**
+   - **Eksperimen Model Transfer Learning:**
+     Sebagai nilai tambah (opsional), proyek dapat dilengkapi dengan model tambahan yang menggunakan transfer learning dari CNN pre-trained (misalnya, MobileNetV2) untuk menjadi benchmark evaluasi performa.
+   - **Perbandingan Kinerja:**
+     Dengan membandingkan model custom dengan model transfer learning, akan diperoleh insight mengenai kelebihan dan kekurangan dari masing-masing pendekatan, sehingga dapat menjadi dasar perbaikan untuk implementasi di masa mendatang.
+   - **Integrasi dan Deployment:**
+     Walaupun penggunaan model transfer learning diperbolehkan hanya sebagai side quest, integrasinya ke dalam aplikasi end-to-end dapat memberikan nilai tambah melalui fitur-fitur seperti pilihan mode inferensi dan optimasi performa.
+
+Dengan kombinasi pendekatan utama dan alternatif tersebut, proyek ini bertujuan untuk memberikan solusi yang tidak hanya memenuhi kebutuhan dasar dalam pengelolaan sampah, tetapi juga membuka peluang untuk pengembangan lebih lanjut melalui eksperimen teknologi canggih. Proses ini akan memastikan bahwa aplikasi yang dibangun mampu dioperasikan secara andal dan memberikan dampak positif pada tata kelola lingkungan serta pengambilan keputusan strategis.
+
+---
+
+## **Data Understanding**
+
+### **1. Sumber Data**
+
+Proyek ini menggunakan dua sumber dataset eksternal yang telah diunduh dari Kaggle:
+1. **Dataset 1: Recyclable and Household Waste Classification**
+    - Tautan: [Recyclable and Household Waste Classification](https://www.kaggle.com/datasets/joebeachcapital/realwaste)
+    - Deskripsi Umum:
+      Dataset ini merupakan kumpulan citra berkualitas tinggi yang menggambarkan sampah rumah tangga serta bahan-bahan yang dapat didaur ulang. Data diorganisasikan dalam struktur folder, di mana setiap folder mewakili kategori label. Berdasarkan deskripsi dan sumber terkait, dataset ini diperkirakan terdiri dari sekitar 15.000 gambar dan mencakup ratusan kategori (misalnya, plastik, kertas, kaca, logam, organik, dan lain-lain).
+    - Format File: Gambar dalam format JPG atau PNG dengan resolusi yang konsisten (misalnya, 256×256 piksel).
+
+2. **Dataset 2: RealWaste Dataset**
+    - Tautan: [Real Waste](https://www.kaggle.com/datasets/joebeachcapital/realwaste)
+    - Deskripsi Umum:
+      Dataset ini merupakan kumpulan citra nyata yang diambil di lingkungan landfill (tempat pembuangan akhir). Dataset RealWaste terdiri dari 4.752 gambar yang telah dikumpulkan secara autentik. Setiap gambar telah diberi label berdasarkan material sampah, sehingga menyediakan informasi yang mendalam untuk klasifikasi.
+    - Rincian Label dan Jumlah Gambar:
+      * Cardboard: 461
+      * Food Organics: 411
+      * Glass: 420
+      * Metal: 790
+      * Miscellaneous Trash: 495
+      * Paper: 500
+      * Plastic: 921
+      * Textile Trash: 318
+      * Vegetation: 436
+    - Format File:
+      Gambar berwarna (RGB) dalam resolusi sekitar 524×524 piksel atau resolusi serupa sesuai dengan standar yang diterapkan oleh pengumpul data.
+      
+### **2. Pembentukan Dataset**
+
+- Dataset yang digunakan dalam proyek ini dihasilkan dengan mengintegrasi dua sumber data eksternal dari Kaggle tersebut.
+- Setelah proses pengumpulan, pembersihan, dan penyelarasan, kedua dataset tersebut dikombinasikan dan direstrukturisasi secara mandiri oleh tim untuk menghasilkan satu dataset final yang konsisten dengan kebutuhan proyek. Dataset final ini kemudian dibagi menjadi 5 kategori utama sesuai dengan fokus proyek, yaitu:
+  * Sampah Anorganik
+  * Sampah Berbahaya
+  * Sampah Elektronik
+  * Sampah Organik
+  * Sampah yang Bisa Didaur Ulang
+- Dataset hasil integrasi dan pembagian kategori ini telah disimpan secara terpusat dan dapat diakses melalui Google Drive: [Dataset Capstone Project](https://drive.google.com/drive/folders/1iWAHYIqiK6B8bj5YJqCr98gAF50-hA4S?usp=drive_link)
+
+### **3. Deskripsi Fitur dan Variabel**
+
+Pada dataset final yang telah disusun, informasi utama yang terdapat di dalamnya adalah
+- **Gambar (Citra):**
+Masing-masing instance berupa gambar berformat JPEG atau PNG yang mengilustrasikan berbagai jenis sampah. Gambar memiliki variasi resolusi dan kondisi pencahayaan, mengingat sebagian data diambil dalam kondisi studio (Dataset 1) dan sebagian lagi dalam kondisi nyata (Dataset 2).
+- **Label/Kategori:**
+Setiap gambar diberi label sesuai dengan salah satu dari 5 kategori:
+* Sampah Anorganik: Meliputi sampah yang umumnya berupa bahan non-organik seperti plastik, logam, dan kaca.
+* Sampah Berbahaya: Sampah yang mengandung bahan kimia atau komponen beracun.
+* Sampah Elektronik: Mengacu pada sampah dari peralatan elektronik yang sudah tidak terpakai.
+* Sampah Organik: Berupa sisa-sisa bahan organik seperti sisa makanan dan dedaunan.
+* Sampah yang Bisa Didaur Ulang: Gambar-gambar yang menunjukkan bahan-bahan yang bisa diolah ulang menjadi produk baru.
+  
+- **Struktur Data:**
+Data diorganisasikan dalam struktur folder, di mana folder utama telah dibagi menjadi 5 subfolder berdasarkan kategori yang telah ditetapkan. Ini memudahkan proses automatisasi data (misalnya melalui fungsi `tf.keras.preprocessing.image_dataset_from_directory`) dan analisis lebih lanjut.
+
+---
+
 ## Isi Repositori
 
 - **Kode Sumber:**  

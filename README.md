@@ -161,10 +161,111 @@ Data diorganisasikan dalam struktur folder, di mana folder utama telah dibagi me
 
 - **Notebook Pengembangan:**  
   Dokumen interaktif (Jupyter Notebook) yang mendemonstrasikan langkah-langkah:
-  - Preprocessing data (resize, normalisasi)
-  - Augmentasi data untuk meningkatkan variasi dan robustnes
-  - Pelatihan model dan evaluasi performa (misalnya, confusion matrix dan classification report)
+  - Split Data
+    # Split ke folder train, val, test
+    splitfolders.ratio(
+        original_dataset_dir,
+        output="/content/dataset_split",
+        seed=42,
+        ratio=(0.7, 0.15, 0.15),
+        move=False  # False = copy file, True = pindahkan file
+    )
+    
+    # Path setelah split
+    train_dir = '/content/dataset_split/train'
+    val_dir = '/content/dataset_split/val'
+    test_dir = '/content/dataset_split/test'
+    
+  - Preprocessing data (resize, normalisasi) & Augmentasi data untuk meningkatkan variasi dan robustnes
+    # Augmentasi hanya untuk training
+    train_datagen = ImageDataGenerator(
+        rescale=1./255,
+        rotation_range=30,
+        zoom_range=0.3,
+        width_shift_range=0.2,
+        height_shift_range=0.2,
+        shear_range=0.2,
+        horizontal_flip=True,
+        brightness_range=[0.7, 1.3]
+    )
+    
+    # Untuk validation & test (hanya rescale)
+    val_test_datagen = ImageDataGenerator(rescale=1./255)
+    
+    # Generator
+    train_generator = train_datagen.flow_from_directory(
+        train_dir,
+        target_size=(224, 224),
+        batch_size=32,
+        class_mode='categorical'
+    )
+    
+    val_generator = val_test_datagen.flow_from_directory(
+        val_dir,
+        target_size=(224, 224),
+        batch_size=32,
+        class_mode='categorical'
+    )
+    
+    test_generator = val_test_datagen.flow_from_directory(
+        test_dir,
+        target_size=(224, 224),
+        batch_size=32,
+        class_mode='categorical',
+        shuffle=False  # Penting untuk evaluasi akurasi per kelas nanti
+    )
+    
+  - Pelatihan model
+    # 1. Load VGG16 tanpa fully connected layer, freeze semua layer dulu
+    base_model = VGG16(
+        weights='imagenet',
+        include_top=False,
+        input_shape=(224, 224, 3)
+    )
+    base_model.trainable = False
+    
+    # 2. Tambah top layers
+    x = base_model.output
+    x = Flatten()(x)
+    x = Dense(256, activation='relu')(x)
+    x = Dropout(0.5)(x)
+    predictions = Dense(4, activation='softmax')(x)
+    
+    model = Model(inputs=base_model.input, outputs=predictions)
+    
+    # 3. Compile model dengan learning rate agak besar untuk training awal
+    model.compile(
+        optimizer=Adam(learning_rate=1e-4),
+        loss='categorical_crossentropy',
+        metrics=['accuracy']
+    )
 
+  - Evaluasi performa (confusion matrix dan classification report)
+    # 1. Prediksi data test
+    y_pred_probs = model.predict(test_generator)
+    y_pred = np.argmax(y_pred_probs, axis=1)
+    
+    # 2. Label asli dari generator
+    y_true = test_generator.classes
+    
+    # 3. Nama kelas (urutan sesuai class_indices)
+    class_names = list(test_generator.class_indices.keys())
+    
+    # 4. Confusion Matrix
+    cm = confusion_matrix(y_true, y_pred)
+    
+    # 5. Visualisasi Confusion Matrix
+    plt.figure(figsize=(8,6))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=class_names, yticklabels=class_names)
+    plt.xlabel('Predicted')
+    plt.ylabel('Actual')
+    plt.title('Confusion Matrix - Klasifikasi Sampah')
+    plt.show()
+    
+    # 6. Classification Report
+    print("Classification Report:")
+    print(classification_report(y_true, y_pred, target_names=class_names))
+    
 - **Aplikasi Streamlit:**
   - **app.py**: Berisi kode aplikasi Streamlit untuk mengimplementasikan EcoSortAI dalam antarmuka web interaktif.
   - **requirements.txt**: Daftar semua dependensi yang diperlukan untuk menjalankan aplikasi Streamlit.
